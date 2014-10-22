@@ -88,10 +88,11 @@ turf <- function(data, n, k, combos, ...) {
 		
 		dagg <- cbind(as.factor(combo.ind), dagg)
 		names(dagg)[1] <- "combo"
-		
-		turf.agg[[i]] <- dagg %.%
-			group_by("combo") %.%
-			summarise(rchX = sum(rchX), frqX = sum(frqX))	
+    turf.agg[[i]] <- plyr::ddply(dagg, "combo", summarise, 
+      rchX = sum(rchX), frqX = sum(frqX))
+  
+			# group_by("combo") %>%
+			# summarise(rchX = sum(rchX), frqX = sum(frqX))	
 		turf.agg[[i]][,2:3] <- turf.agg[[i]][,2:3] / sum(datX[,2])
 		turf.agg[[i]] <- cbind(turf.agg[[i]], combos[[i]])
 		if(sort == "a" | sort == "d") {
